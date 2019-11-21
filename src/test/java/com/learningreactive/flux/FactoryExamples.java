@@ -66,7 +66,20 @@ public class FactoryExamples {
       .log();
 
     Thread.sleep(2000);
+  }
 
+
+  @Test
+  public void fluxBackPressure() {
+    Flux<Integer> range = Flux.range(20, 10);
+    StepVerifier.create(range)
+      .expectSubscription()
+      .thenRequest(1)
+      .expectNext(20)
+      .thenRequest(2)
+      .expectNext(21, 22)
+      .thenCancel()
+      .verify();
 
   }
 }
